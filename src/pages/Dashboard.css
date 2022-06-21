@@ -42,6 +42,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-top: -30px;
 }
 
 .copy {
@@ -49,14 +50,18 @@
     cursor: pointer;
 }
 
-.switch-title{
-    margin-top: 50px;
+.balance {
+    margin-top: -20px;
+}
+
+.switch-title {
+    margin-top: 100px;
 }
 
 .btn-network {
     display: inline-block;
-    padding: 15px 25px;
-    font-size: 24px;
+    padding: 10px 20px;
+    font-size: 16px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -78,7 +83,49 @@
     transform: translateY(4px);
 }
 
-.error{
-    color: red;
-    margin-top: 100px;
+.network-switcher {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: -100px;
+}
+
+.content-left {
+    padding: 20px;
+    ;
+}
+
+.content-right {
+    padding: 20px;
+    ;
+}
+
+.input {
+    text-align: center;
+}
+
+.btn-send {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #228304;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+}
+
+.btn-send:hover {
+    background-color: #00854d
+}
+
+.btn-send:active {
+    background-color: #00884f;
+    box-shadow: 0 5px rgb(180, 247, 167);
+    transform: translateY(4px);
 }

@@ -3,13 +3,51 @@ import logo from '../assets/logo.png';
 import copy from '../assets/copy.png';
 import './Dashboard.css';
 import { ethers } from 'ethers';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { InputDecimal } from '../assets/components/InputDecimal';
+import Web3 from 'web3';
 
 function Dashboard() {
 
     const [walletAdrres, setWalletAdrres] = useState(null);
     const [balance, setBalance] = useState(0);
-    const [network, setNetwork] = useState('ETH');
+    const [network, setNetwork] = useState(null);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+    const [amount, setAmount] = useState("");
+    const [reciever, setReciever] = useState("");
+
+    //Toast configs
+    const copyied = () => toast.success('Address Copied!', {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+    });
+
+    const toastError = () => toast.error(error, {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+
+    const toastSuccess = () => toast.info(success, {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
 
     //get wallet address
     useEffect(() => {
@@ -50,7 +88,7 @@ function Dashboard() {
     //copy to clipboard
     const copyHandler = () => {
         navigator.clipboard.writeText(walletAdrres);
-        alert('Copied!');
+        copyied();
     }
 
     //change network to eth mainnet
@@ -60,6 +98,9 @@ function Dashboard() {
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: `0x${Number(1).toString(16)}` }],
             });
+            setNetwork('ETH');
+            setSuccess('Network Changed to Ethereum MainNet');
+            toastSuccess();
         } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -85,10 +126,12 @@ function Dashboard() {
                     });
                 } catch (addError) {
                     setError(addError.message);
+                    toastError();
                 }
             }
 
-            setError(switchError.message)
+            setError(switchError.message);
+            toastError();
         }
     }
 
@@ -99,6 +142,9 @@ function Dashboard() {
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: `0x${Number(4).toString(16)}` }],
             });
+            setNetwork('ETH');
+            setSuccess('Network Changed to Ethereum Testnet');
+            toastSuccess();
         } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -126,44 +172,203 @@ function Dashboard() {
                     });
                 } catch (addError) {
                     setError(addError.message);
+                    toastError();
                 }
             }
 
-            setError(switchError.message)
+            setError(switchError.message);
+            toastError();
         }
     }
 
-    return (
-        <div className="page-container">
-            <header className="container">
-                <img src={logo} className="logo" alt="logo" />
-                <h1>
-                    My Wallet
-                </h1>
-                <div className='address-container'>
-                    <p>{first}...{last}</p> &nbsp;&nbsp;
-                    <img src={copy} className="copy" alt="logo" onClick={copyHandler} />
-                </div>
+    //change network to BSC MaiNet
+    const changeToBSCMainNet = async () => {
+        try {
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: `0x${Number(56).toString(16)}` }],
+            });
+            setNetwork('BNB');
+            setSuccess('Network Changed to Binance Smart Chain');
+            toastSuccess();
+        } catch (switchError) {
+            // This error code indicates that the chain has not been added to MetaMask.
+            if (switchError.code === 4902) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: `0x${Number(56).toString(16)}`,
+                                chainName: 'Binance Smart Chain Mainnet',
+                                nativeCurrency: {
+                                    name: "Binance Chain Native Token",
+                                    symbol: "BNB",
+                                    decimals: 18
+                                },
+                                rpcUrls: [
+                                    "https://bsc-dataseed1.binance.org",
+                                    "https://bsc-dataseed2.binance.org",
+                                    "https://bsc-dataseed3.binance.org",
+                                    "https://bsc-dataseed4.binance.org",
+                                    "https://bsc-dataseed1.defibit.io",
+                                    "https://bsc-dataseed2.defibit.io",
+                                    "https://bsc-dataseed3.defibit.io",
+                                    "https://bsc-dataseed4.defibit.io",
+                                    "https://bsc-dataseed1.ninicoin.io",
+                                    "https://bsc-dataseed2.ninicoin.io",
+                                    "https://bsc-dataseed3.ninicoin.io",
+                                    "https://bsc-dataseed4.ninicoin.io",
+                                    "wss://bsc-ws-node.nariox.org"
+                                ],
+                                blockExplorerUrls: ["https://bscscan.com"]
+                            },
+                        ],
+                    });
+                } catch (addError) {
+                    setError(addError.message);
+                    toastError();
+                }
+            }
 
-                <div className='balance-container'>
-                    <p>Balance</p>
-                    <h2>{balance} {network}</h2>
-                </div>
+            setError(switchError.message);
+            toastError();
+        }
+    }
+    //change network to BSC MaiNet
+    const changeToBSCTestNet = async () => {
+        try {
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: `0x${Number(97).toString(16)}` }],
+            });
+            setNetwork('tBNB');
+            setSuccess('Network Changed to BSC TestNet');
+            toastSuccess();
+        } catch (switchError) {
+            // This error code indicates that the chain has not been added to MetaMask.
+            if (switchError.code === 4902) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: `0x${Number(97).toString(16)}`,
+                                chainName: 'Binance Smart Chain Testnet',
+                                nativeCurrency: {
+                                    name: "Binance Chain Native Token",
+                                    symbol: "tBNB",
+                                    decimals: 18
+                                },
+                                rpcUrls: [
+                                    "https://data-seed-prebsc-1-s1.binance.org:8545",
+                                    "https://data-seed-prebsc-2-s1.binance.org:8545",
+                                    "https://data-seed-prebsc-1-s2.binance.org:8545",
+                                    "https://data-seed-prebsc-2-s2.binance.org:8545",
+                                    "https://data-seed-prebsc-1-s3.binance.org:8545",
+                                    "https://data-seed-prebsc-2-s3.binance.org:8545"
+                                ],
+                                blockExplorerUrls: ["https://testnet.bscscan.com"]
+                            },
+                        ],
+                    });
+                } catch (addError) {
+                    setError(addError.message);
+                    toastError();
+                }
+            }
 
-                <h2 className='switch-title'>Switch Network</h2>
+            setError(switchError.message);
+            toastError();
+        }
+    }
 
-                <div className='natwork-switcher'>
+
+const transferhandler = () => {
+
+    try {
+        window.ethereum
+            .request({
+                method: 'eth_sendTransaction',
+                params: [
+                    {
+                        from: walletAdrres,
+                        to: reciever,
+                        gas: '0x76c0', // 30400 0.000000002
+                        gasPrice: '0x9184e72a000', // 10000000000000
+                        value: "0x" + Number(Web3.utils.toWei(amount, "ether")).toString(16), // 2441406250
+                        data:
+                            '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
+                    },
+                ],
+            })
+            .then((result) => {
+            })
+            .catch((error) => {
+            });
+        setSuccess('Success');
+        toastSuccess();
+    } catch (error) {
+        setError(error);
+        toastError();
+    }
+}
+
+return (
+    <div className="page-container">
+        <header className="container">
+            <img src={logo} className="logo" alt="logo" />
+            <h1>
+                My Wallet
+            </h1>
+            <div className='address-container'>
+                <p>{first}...{last}</p> &nbsp;&nbsp;
+                <img src={copy} className="copy" alt="logo" onClick={copyHandler} />
+            </div>
+
+            <ToastContainer
+                position="bottom-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable={false}
+                pauseOnHover={false}
+            />
+
+            <div className='balance-container'>
+                <p>Balance</p>
+                <h2 className='balance'>{balance} {network}</h2>
+            </div>
+
+            <div className='transfer'>
+                <InputDecimal type="text" placeholder="Transfer Amount" className='input' value={amount} onChange={(evt) => { setAmount(evt.target.value); }} />
+                <InputDecimal type="text" placeholder="Reciever Address" className='input' value={reciever} onChange={(evt) => { setReciever(evt.target.value); }} />
+                <button className='btn-send' onClick={transferhandler}>Transfer</button>
+            </div>
+
+            <h1 className='switch-title'>Switch Networks</h1>
+
+            <div className='network-switcher'>
+                <div className='content-left'>
+                    <h2 className='switch-title'>Main Networks</h2>
                     <button className='btn-network' onClick={changeToEthMainNet}>Ethereum</button>
                     &nbsp; &nbsp; &nbsp;
+                    <button className='btn-network' onClick={changeToBSCMainNet}>BSC</button>
+                </div>
+                <div className='content-right'>
+                    <h2 className='switch-title'>Test Networks</h2>
                     <button className='btn-network' onClick={changeToEthTestNet}>Rinkeby</button>
+                    &nbsp; &nbsp; &nbsp;
+                    <button className='btn-network' onClick={changeToBSCTestNet}>BSC</button>
                 </div>
+            </div>
 
-                <div>
-                    <small>{error}</small>
-                </div>
-            </header>
-        </div>
-    );
+        </header>
+    </div>
+);
 }
 
 export default Dashboard;

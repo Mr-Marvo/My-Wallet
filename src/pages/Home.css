@@ -15,7 +15,7 @@
 
 .App-header {
     background-color: #282c34;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -69,6 +69,6 @@
 }
 
 .walletAddress {
-    color: rgb(39, 1, 255);
+    color: rgb(191, 181, 252);
     font-size: 12px;
 }
