@@ -20,7 +20,8 @@
     align-items: center;
     justify-content: center;
     color: white;
-    height: 100vh;
+    height: auto;
+    z-index: 100;
 }
 
 .link {
@@ -55,7 +56,7 @@
 }
 
 .switch-title {
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 .btn-network {
@@ -93,12 +94,12 @@
 
 .content-left {
     padding: 20px;
-    ;
+    margin-top: 10px;
 }
 
 .content-right {
     padding: 20px;
-    ;
+    margin-top: 10px;
 }
 
 .input {
@@ -128,4 +129,19 @@
     background-color: #00884f;
     box-shadow: 0 5px rgb(180, 247, 167);
     transform: translateY(4px);
+}
+
+.txHash{
+    margin-top: 20px;
+}
+
+.copytxHash{
+    width: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.transfer{
+    background-color: #051329;
+    padding: 20px;
 }

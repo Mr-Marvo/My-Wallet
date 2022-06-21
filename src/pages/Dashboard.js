@@ -17,9 +17,11 @@ function Dashboard() {
     const [success, setSuccess] = useState(null);
     const [amount, setAmount] = useState("");
     const [reciever, setReciever] = useState("");
+    const [txHash, setTxHash] = useState(null);
+    const [isHashAvailable, setHashAvailability] = useState(false);
 
     //Toast configs
-    const copyied = () => toast.success('Address Copied!', {
+    const copyied = (content) => toast.success(content, {
         position: "bottom-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -88,7 +90,7 @@ function Dashboard() {
     //copy to clipboard
     const copyHandler = () => {
         navigator.clipboard.writeText(walletAdrres);
-        copyied();
+        copyied('Address Copied!');
     }
 
     //change network to eth mainnet
@@ -283,92 +285,109 @@ function Dashboard() {
         }
     }
 
+    //Transaction handler
+    const transferhandler = () => {
 
-const transferhandler = () => {
-
-    try {
-        window.ethereum
-            .request({
-                method: 'eth_sendTransaction',
-                params: [
-                    {
-                        from: walletAdrres,
-                        to: reciever,
-                        gas: '0x76c0', // 30400 0.000000002
-                        gasPrice: '0x9184e72a000', // 10000000000000
-                        value: "0x" + Number(Web3.utils.toWei(amount, "ether")).toString(16), // 2441406250
-                        data:
-                            '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
-                    },
-                ],
-            })
-            .then((result) => {
-            })
-            .catch((error) => {
-            });
-        setSuccess('Success');
-        toastSuccess();
-    } catch (error) {
-        setError(error);
-        toastError();
+        try {
+            window.ethereum
+                .request({
+                    method: 'eth_sendTransaction',
+                    params: [
+                        {
+                            from: walletAdrres,
+                            to: reciever,
+                            gas: '0x76c0',
+                            gasPrice: '0x6aa790224',
+                            value: "0x" + Number(Web3.utils.toWei(amount, "ether")).toString(16), // 2441406250
+                            data:
+                                '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
+                        },
+                    ],
+                })
+                .then((result) => {
+                    setTxHash(result);
+                    setHashAvailability(true);
+                    getBalance();
+                    setSuccess('Transaction Complete!');
+                    toastSuccess();
+                })
+                .catch((error) => {
+                    setError(error);
+                    toastError();
+                });
+        } catch (error) {
+            setError(error);
+            toastError();
+        }
     }
-}
 
-return (
-    <div className="page-container">
-        <header className="container">
+    //Copy txHash
+    const copyTxHash = () => {
+        navigator.clipboard.writeText(txHash);
+        copyied('txHash Copied!');
+    }
+
+    return (
+        <div className="page-container">
             <img src={logo} className="logo" alt="logo" />
-            <h1>
-                My Wallet
-            </h1>
-            <div className='address-container'>
-                <p>{first}...{last}</p> &nbsp;&nbsp;
-                <img src={copy} className="copy" alt="logo" onClick={copyHandler} />
-            </div>
-
-            <ToastContainer
-                position="bottom-center"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss={false}
-                draggable={false}
-                pauseOnHover={false}
-            />
-
-            <div className='balance-container'>
-                <p>Balance</p>
-                <h2 className='balance'>{balance} {network}</h2>
-            </div>
-
-            <div className='transfer'>
-                <InputDecimal type="text" placeholder="Transfer Amount" className='input' value={amount} onChange={(evt) => { setAmount(evt.target.value); }} />
-                <InputDecimal type="text" placeholder="Reciever Address" className='input' value={reciever} onChange={(evt) => { setReciever(evt.target.value); }} />
-                <button className='btn-send' onClick={transferhandler}>Transfer</button>
-            </div>
-
-            <h1 className='switch-title'>Switch Networks</h1>
-
-            <div className='network-switcher'>
-                <div className='content-left'>
-                    <h2 className='switch-title'>Main Networks</h2>
-                    <button className='btn-network' onClick={changeToEthMainNet}>Ethereum</button>
-                    &nbsp; &nbsp; &nbsp;
-                    <button className='btn-network' onClick={changeToBSCMainNet}>BSC</button>
+            <header className="container">
+                <h1>
+                    My Wallet
+                </h1>
+                <div className='address-container'>
+                    <p>{first}...{last}</p> &nbsp;&nbsp;
+                    <img src={copy} className="copy" alt="logo" onClick={copyHandler} />
                 </div>
-                <div className='content-right'>
-                    <h2 className='switch-title'>Test Networks</h2>
-                    <button className='btn-network' onClick={changeToEthTestNet}>Rinkeby</button>
-                    &nbsp; &nbsp; &nbsp;
-                    <button className='btn-network' onClick={changeToBSCTestNet}>BSC</button>
-                </div>
-            </div>
 
-        </header>
-    </div>
-);
+                <ToastContainer
+                    position="bottom-center"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss={false}
+                    draggable={false}
+                    pauseOnHover={false}
+                />
+
+                <div className='balance-container'>
+                    <p>Balance</p>
+                    <h2 className='balance'>{balance} {network}</h2>
+                </div>
+
+                <div className='transfer'>
+                    <InputDecimal type="text" placeholder="Transfer Amount" className='input' value={amount} onChange={(evt) => { setAmount(evt.target.value); }} />
+                    <InputDecimal type="text" placeholder="Reciever Address" className='input' value={reciever} onChange={(evt) => { setReciever(evt.target.value); }} />
+                    <button className='btn-send' onClick={transferhandler}>Transfer</button>
+                </div>
+                <div className='txHash' hidden={isHashAvailable == false}>
+                    <small>TxHash</small><br/>
+                    <small>{txHash}</small><br/>
+                    <img src={copy} className="copytxHash" alt="logo" onClick={copyTxHash} />
+                </div>
+
+
+                <h1 className='switch-title'>Switch Networks</h1>
+
+                <div className='network-switcher'>
+                    <div className='content-left'>
+                        <h2 className='switch-title'>Main Networks</h2>
+                        <button className='btn-network' onClick={changeToEthMainNet}>Ethereum</button>
+                        &nbsp; &nbsp; &nbsp;
+                        <button className='btn-network' onClick={changeToBSCMainNet}>BSC</button>
+                    </div>
+                    <div className='content-right'>
+                        <h2 className='switch-title'>Test Networks</h2>
+                        <button className='btn-network' onClick={changeToEthTestNet}>Rinkeby</button>
+                        &nbsp; &nbsp; &nbsp;
+                        <button className='btn-network' onClick={changeToBSCTestNet}>BSC</button>
+                    </div>
+                </div>
+
+            </header>
+        </div>
+    );
 }
 
 export default Dashboard;
