@@ -21,12 +21,18 @@ Your app is ready to be deployed!
 
 ## Learn More
 
-You can learn more about Blockchain Development and web3 from my github. So please hit [Follow](https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2FMr-Marvo) button.\
+You can learn more about Blockchain Development and web3 from my github. So please hit [Follow](https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2FMr-Marvo) button.
 
 ### Contact Me
 
 If you want any support or If you have any project for me please feel free to contact me.\
-View [Github Profile](https://github.com/Mr-Marvo) for contact details.\
+View [Github Profile](https://github.com/Mr-Marvo) for contact details.
 
 If you like my project please hit the [star] button
-## ⚡ Give a [Star]
+## ⚡ Give a Star ⭐
+## ⚡ [Follow Me](https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2FMr-Marvo) 💪
+## ⚡ [Github](https://github.com/Mr-Marvo) ❤
+
+
+## Happy Coding ♨
+devNishan
