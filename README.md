@@ -1,6 +1,6 @@
 # My Wallet (MetaMask)
 
-This project is developed for learning purposes. MetaMask intergration, wallet connect, change network, show balance and transaction etc.\
+This project is developed for learning purposes. You can learn MetaMask intergration, wallet connect, change network, show balance and transaction etc.\
 So anyone who would like to learn how to interact with MetaMask wallet you can use this example project.
 
 ## Available Scripts
@@ -12,9 +12,6 @@ In the project directory, you can run:
 Runs the app in the development mode.
 
 ### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
